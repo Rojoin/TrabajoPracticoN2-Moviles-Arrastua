@@ -28,9 +28,10 @@ public class TestPluginLog : MonoBehaviour
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            textBox.text = "Works";
-            Debug.Log("Works");
-            Debug.Log(pluginInstance.Call<string>("getLOGTAG", Time.deltaTime.ToString()));
+            string text = "Works";
+            textBox.text = text;
+            Debug.Log(text);
+            pluginInstance.Call("SendLog", text);
         }
     }
 }

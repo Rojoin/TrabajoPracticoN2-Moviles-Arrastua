@@ -2,6 +2,12 @@ package com.rojoin.mylibrary;
 
 import android.os.Environment;
 import android.util.Log;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -9,10 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 import java.io.FileWriter;
+
+
 public class Logger {
 
     private static final String LOGTAG = "RojoinLOG";
     List<String> logList = new ArrayList<String>();
+
+    private int currentLog = 0;
+    private int maxLog = 5;
+
 
     private static Logger _instance = null;
 
@@ -30,6 +42,11 @@ public class Logger {
     {
         logList.add(log);
         Log.d("Unity Log", log);
+        currentLog++;
+        if (currentLog == maxLog)
+        {
+            SaveLogsToFile();
+        }
     }
     public void ClearLogs()
     {
