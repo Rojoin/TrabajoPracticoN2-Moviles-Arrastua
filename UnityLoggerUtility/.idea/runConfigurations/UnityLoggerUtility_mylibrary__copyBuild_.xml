@@ -3,6 +3,7 @@
     <ExternalSystemSettings>
       <option name="env">
         <map>
+          <entry key="android.enableJetifier" value="true" />
           <entry key="android.useAndroidX" value="true" />
         </map>
       </option>

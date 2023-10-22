@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import java.io.BufferedWriter;
@@ -17,16 +18,17 @@ import android.content.DialogInterface;
 import android.util.Log;
 import android.content.pm.PackageManager;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 
-public class Logger
+public class Logger extends AppCompatActivity
 {
 
     private static final String LOGTAG = "RojoinLOG";
     private static final int STORAGE_PERMISSION_REQUEST_CODE = 10;
-    private static final int PERMISSION_REQUEST_CODE = 123;
+    public static final int PERMISSION_REQUEST_CODE = 123;
     List<String> logList = new ArrayList<String>();
 
     private static Activity unityActivity;
@@ -75,11 +77,11 @@ public class Logger
 
         }
         logList.add(log);
-        if (ContextCompat.checkSelfPermission(unityActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(unityActivity, new String[]{PERMISSION}, PERMISSION_REQUEST_CODE);
-            SaveLogsToFile();
+        if (ContextCompat.checkSelfPermission(unityActivity,Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(unityActivity ,new String[]{PERMISSION}, PERMISSION_REQUEST_CODE);
+
         } else {
-            SaveLogsToFile();
+
 
         }
 
@@ -133,17 +135,22 @@ public class Logger
             e.printStackTrace();
         }
     }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-
+    }
+    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted; you can now save logs
-                SaveLogsToFile();
+
             } else {
-                // Permission is denied; handle it as needed (e.g., show a message)
+
             }
         }
     }
+
 
 }
