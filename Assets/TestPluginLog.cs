@@ -31,6 +31,7 @@ public class TestPluginLog : MonoBehaviour
             unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
             unityActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
             pluginInstance.CallStatic("initialize", unityActivity);
+            pluginInstance.Call("SetFileLocation", Application.persistentDataPath + "/" + "Test");
 
             Application.logMessageReceived += SendLogToAndroid;
             if (Permission.HasUserAuthorizedPermission(permission))

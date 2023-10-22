@@ -2,44 +2,53 @@ package com.rojoin.UnityLogger;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 import java.io.FileWriter;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.content.pm.PackageManager;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.motion.widget.Debug;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 
-public class Logger extends AppCompatActivity
-{
+public class Logger {
 
     private static final String LOGTAG = "RojoinLOG";
     private static final int STORAGE_PERMISSION_REQUEST_CODE = 10;
     public static final int PERMISSION_REQUEST_CODE = 123;
     List<String> logList = new ArrayList<String>();
-
+    private String fileName;
     private static Activity unityActivity;
 
 
-    public static void initialize(Activity context)
-    {
+    public static void initialize(Activity context) {
         unityActivity = context;
     }
+
     AlertDialog.Builder builder;
     private static Logger _instance = null;
+
+    public void SetFileLocation(String filePath) {
+        fileName = filePath;
+    }
 
     public static Logger get_instance() {
         if (_instance == null)
@@ -51,17 +60,16 @@ public class Logger extends AppCompatActivity
         return LOGTAG + time;
     }
 
-    public void SendLog(String log)
-    {
+    public void SendLog(String log) {
         logList.add(log);
         Log.d("Unity Log", log);
 
         SaveLogsToFile();
     }
-    public void SendLog(String log,int logType)
-    {
-        switch(logType)
-        {
+
+    public void SendLog(String log, int logType) {
+        logList.add(log);
+        switch (logType) {
             case 0:
                 Log.v("Unity Log", log);
                 break;
@@ -76,81 +84,88 @@ public class Logger extends AppCompatActivity
                 break;
 
         }
-        logList.add(log);
-        if (ContextCompat.checkSelfPermission(unityActivity,Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(unityActivity ,new String[]{PERMISSION}, PERMISSION_REQUEST_CODE);
-
-        } else {
-
-
-        }
+        SaveLogsToFile();
 
     }
+
     private static final String PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
-    public void CreateAlert()
-    {
+    public void CreateAlert() {
         builder = new AlertDialog.Builder(unityActivity);
         builder.setTitle("Confirmación");
         builder.setMessage("¿Desea borrar todos los logs?");
         builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Log.v(LOGTAG,"Apreto Si");
+                Log.v(LOGTAG, "Apreto Si");
 
+                DeleteLogs();
                 logList.clear();
                 dialog.cancel();
             }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener()
-        {
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                Log.v(LOGTAG,"Apreto No");
+                Log.v(LOGTAG, "Apreto No");
 
             }
         });
 
     }
-    public void ShowAlert()
-    {
-        AlertDialog  alert = builder.create();
+
+    public void ShowAlert() {
+        AlertDialog alert = builder.create();
         builder.show();
     }
+
     private void SaveLogsToFile() {
-        Log.v("Android","Llegue aca");
-        File logFile = new File(Environment.getExternalStorageDirectory(), "unity_logs.txt");
+
+        Context context = unityActivity.getApplicationContext();
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true));
+            DeleteLogs();
+            File logFile = new File(context.getExternalFilesDir(null), "Unity_Rojoin_Log" + ".txt");
+            FileWriter fileWriter = new FileWriter(logFile, true); // Use 'true' to append to the existing file
+
             for (String log : logList) {
-                writer.write(log);
-                writer.newLine();
+                fileWriter.append(log).append("\n");
             }
-            writer.close();
-            String Msg = "The File has been created";
-            Log.v("Android", Msg);
+            Log.v("FileWriter", context.getExternalFilesDir(null).toString());
+            Toast.makeText(unityActivity.getApplicationContext(), "File created in: " + context.getExternalFilesDir(null).toString(), Toast.LENGTH_LONG).show();
+
+            fileWriter.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.v("FileWriter", "Failed To write");
+            Toast.makeText(unityActivity.getApplicationContext(), "Failed To write", Toast.LENGTH_LONG).show();
         }
-    }
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
     }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
+    private void DeleteLogs() {
+
+        Context context = unityActivity.getApplicationContext();
+
+        File logFile = new File(context.getExternalFilesDir(null), "Unity_Rojoin_Log.txt");
+        if (logFile.exists()) {
+
+            if (logFile.delete()) {
+                Log.i("FileDeleted", "File Unity_Rojoin_Log.txt deleted successfully.");
+                Toast.makeText(unityActivity.getApplicationContext(), "File Unity_Rojoin_Log.txt deleted successfully", Toast.LENGTH_LONG).show();
             } else {
-
+                Log.e("FileDeleteError", "Failed to delete file " + fileName + ".txt");
+                Toast.makeText(unityActivity.getApplicationContext(), "Failed to delete file File Unity_Rojoin_Log.txt", Toast.LENGTH_LONG).show();
             }
         }
-    }
 
+
+    }
 
 }
+
+
+
+
+
+
