@@ -124,14 +124,12 @@ public class Logger {
         try {
             DeleteLogs();
             File logFile = new File(context.getExternalFilesDir(null), "Unity_Rojoin_Log" + ".txt");
-            FileWriter fileWriter = new FileWriter(logFile, true); // Use 'true' to append to the existing file
+            FileWriter fileWriter = new FileWriter(logFile, true);
 
             for (String log : logList) {
                 fileWriter.append(log).append("\n");
             }
             Log.v("FileWriter", context.getExternalFilesDir(null).toString());
-            Toast.makeText(unityActivity.getApplicationContext(), "File created in: " + context.getExternalFilesDir(null).toString(), Toast.LENGTH_SHORT).show();
-
             fileWriter.close();
         } catch (IOException e) {
             Log.v("FileWriter", "Failed To write");
@@ -149,17 +147,15 @@ public class Logger {
 
             if (logFile.delete()) {
                 Log.i("FileDeleted", "File Unity_Rojoin_Log.txt deleted successfully.");
-                Toast.makeText(unityActivity.getApplicationContext(), "File Unity_Rojoin_Log.txt deleted successfully", Toast.LENGTH_SHORT).show();
+
             } else {
                 Log.e("FileDeleteError", "Failed to delete file " + fileName + ".txt");
-                Toast.makeText(unityActivity.getApplicationContext(), "Failed to delete file: Unity_Rojoin_Log.txt", Toast.LENGTH_SHORT).show();
+
             }
         }
         else
         {
             Log.e("FileDeleteError", "No file to delete");
-            Toast.makeText(unityActivity.getApplicationContext(), "Failed to delete file: Doesn't Exist", Toast.LENGTH_SHORT).show();
-
 
         }
 
@@ -187,7 +183,7 @@ public class Logger {
         else
         {
              Log.e("ReadFile", "File not found ");
-                return "File doenst Exist";
+                return "File doest Exist";
 
         }
     }
