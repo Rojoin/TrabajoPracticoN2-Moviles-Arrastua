@@ -134,7 +134,7 @@ public class TestPluginLog : MonoBehaviour
     {
         string text = "This is a Log";
         textBox.text = text;
-        Debug.LogWarning(text);
+        Debug.Log(text);
     }
     public void TestError()
     {
