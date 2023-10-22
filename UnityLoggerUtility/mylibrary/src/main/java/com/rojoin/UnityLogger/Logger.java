@@ -15,14 +15,18 @@ import java.io.FileWriter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.content.pm.PackageManager;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 
 public class Logger
 {
 
     private static final String LOGTAG = "RojoinLOG";
-    private static final int STORAGE_PERMISSION_REQUEST_CODE =1 ;
+    private static final int STORAGE_PERMISSION_REQUEST_CODE = 10;
+    private static final int PERMISSION_REQUEST_CODE = 123;
     List<String> logList = new ArrayList<String>();
 
     private static Activity unityActivity;
@@ -71,12 +75,17 @@ public class Logger
 
         }
         logList.add(log);
-        if (ActivityCompat.checkSelfPermission(unityActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions( unityActivity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
+        if (ContextCompat.checkSelfPermission(unityActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(unityActivity, new String[]{PERMISSION}, PERMISSION_REQUEST_CODE);
+            SaveLogsToFile();
         } else {
             SaveLogsToFile();
+
         }
+
     }
+    private static final String PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 
     public void CreateAlert()
     {
@@ -109,6 +118,7 @@ public class Logger
         builder.show();
     }
     private void SaveLogsToFile() {
+        Log.v("Android","Llegue aca");
         File logFile = new File(Environment.getExternalStorageDirectory(), "unity_logs.txt");
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true));
@@ -117,13 +127,23 @@ public class Logger
                 writer.newLine();
             }
             writer.close();
-            String path = Environment.getExternalStorageDirectory() + "/unity_logs.txt";
-            String Msg = "The File has been created in :" + path;
+            String Msg = "The File has been created";
             Log.v("Android", Msg);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted; you can now save logs
+                SaveLogsToFile();
+            } else {
+                // Permission is denied; handle it as needed (e.g., show a message)
+            }
+        }
+    }
 
 }

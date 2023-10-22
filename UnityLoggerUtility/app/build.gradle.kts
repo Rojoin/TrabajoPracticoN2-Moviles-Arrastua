@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.rojoin.unityloggerutility"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.rojoin.unityloggerutility"
