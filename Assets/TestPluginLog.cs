@@ -12,7 +12,7 @@ public class TestPluginLog : MonoBehaviour
     private const string className = packageName + ".Logger";
     [SerializeField] private TextMeshProUGUI textBox;
     public GameObject textMeshProPrefab;
-    public GameObject contentParent;
+    public Transform contentParent;
     private List<GameObject> logsList = new List<GameObject>();
 #if UNITY_ANDROID
     private AndroidJavaClass PluginClass;
@@ -90,14 +90,18 @@ public class TestPluginLog : MonoBehaviour
         {
             string logs = pluginInstance.Call<string>("readFile");
             string[] lines = logs.Split(new[] { "\n", "\r\n" }, System.StringSplitOptions.None);
-            foreach (GameObject textObject in logsList)
+
+            if (logsList.Capacity > 0)
             {
-                Destroy(textObject.gameObject);
+                foreach (GameObject VARIABLE in logsList)
+                {
+                    Destroy(VARIABLE);
+                }
             }
             logsList.Clear();
             foreach (string line in lines)
             {
-                GameObject textObject = Instantiate(textMeshProPrefab, transform);
+                GameObject textObject = Instantiate(textMeshProPrefab, contentParent);
                 TextMeshProUGUI textComponent = textObject.GetComponent<TextMeshProUGUI>();
                 textComponent.text = line;
                 logsList.Add(textObject);
