@@ -100,12 +100,12 @@ public class Logger {
 
     public void CreateAlert() {
         builder = new AlertDialog.Builder(unityActivity);
-        builder.setTitle("Confirmación");
-        builder.setMessage("¿Desea borrar todos los logs?");
-        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+        builder.setTitle("Confirmation");
+        builder.setMessage("Are you sure you want to delete the log file?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Log.v(LOGTAG, "Apreto Si");
+                Log.v(LOGTAG, "Press yes");
 
                 DeleteLogs();
                 logList.clear();
@@ -116,7 +116,7 @@ public class Logger {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                Log.v(LOGTAG, "Apreto No");
+                Log.v(LOGTAG, "Press No");
 
             }
         });
