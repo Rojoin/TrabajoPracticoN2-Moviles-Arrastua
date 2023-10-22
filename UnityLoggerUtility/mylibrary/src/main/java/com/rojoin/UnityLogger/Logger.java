@@ -162,8 +162,15 @@ public class Logger {
                 Toast.makeText(unityActivity.getApplicationContext(), "File Unity_Rojoin_Log.txt deleted successfully", Toast.LENGTH_SHORT).show();
             } else {
                 Log.e("FileDeleteError", "Failed to delete file " + fileName + ".txt");
-                Toast.makeText(unityActivity.getApplicationContext(), "Failed to delete file File Unity_Rojoin_Log.txt", Toast.LENGTH_SHORT).show();
+                Toast.makeText(unityActivity.getApplicationContext(), "Failed to delete file: Unity_Rojoin_Log.txt", Toast.LENGTH_SHORT).show();
             }
+        }
+        else
+        {
+            Log.e("FileDeleteError", "No file to delete");
+            Toast.makeText(unityActivity.getApplicationContext(), "Failed to delete file: Doesn't Exist", Toast.LENGTH_SHORT).show();
+
+
         }
 
     }
@@ -183,13 +190,13 @@ public class Logger {
             }
             catch (IOException e)
             {
-                Log.e("login activity", "Can not read file");
+                Log.e("ReadFile", "Can not read file");
                 return "Can not read file";
             }
         }
         else
         {
-             Log.e("login activity", "File not found ");
+             Log.e("ReadFile", "File not found ");
                 return "File doenst Exist";
 
         }
