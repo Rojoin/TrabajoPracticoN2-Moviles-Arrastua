@@ -1,7 +1,9 @@
 package com.rojoin.UnityLogger;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.util.Log;
 import java.io.BufferedWriter;
@@ -14,10 +16,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
+
 public class Logger
 {
 
     private static final String LOGTAG = "RojoinLOG";
+    private static final int STORAGE_PERMISSION_REQUEST_CODE =1 ;
     List<String> logList = new ArrayList<String>();
 
     private static Activity unityActivity;
@@ -66,8 +71,11 @@ public class Logger
 
         }
         logList.add(log);
-
-        SaveLogsToFile();
+        if (ActivityCompat.checkSelfPermission(unityActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions( unityActivity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
+        } else {
+            SaveLogsToFile();
+        }
     }
 
     public void CreateAlert()
