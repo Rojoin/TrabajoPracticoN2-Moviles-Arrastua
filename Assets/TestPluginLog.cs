@@ -90,6 +90,10 @@ public class TestPluginLog : MonoBehaviour
         {
             string logs = pluginInstance.Call<string>("readFile");
             string[] lines = logs.Split(new[] { "\n", "\r\n" }, System.StringSplitOptions.None);
+            foreach (GameObject textObject in logsList)
+            {
+                Destroy(textObject.gameObject);
+            }
             logsList.Clear();
             foreach (string line in lines)
             {
