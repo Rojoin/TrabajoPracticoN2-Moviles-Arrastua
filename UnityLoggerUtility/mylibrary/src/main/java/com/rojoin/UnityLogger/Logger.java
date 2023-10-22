@@ -34,8 +34,7 @@ import androidx.core.content.ContextCompat;
 public class Logger {
 
     private static final String LOGTAG = "RojoinLOG";
-    private static final int STORAGE_PERMISSION_REQUEST_CODE = 10;
-    public static final int PERMISSION_REQUEST_CODE = 123;
+
     List<String> logList = new ArrayList<String>();
     private String fileName;
     private static Activity unityActivity;
@@ -48,15 +47,6 @@ public class Logger {
     AlertDialog.Builder builder;
     private static Logger _instance = null;
 
-    public void SetFileLocation(String filePath) {
-        fileName = filePath;
-    }
-
-    public static Logger get_instance() {
-        if (_instance == null)
-            _instance = new Logger();
-        return _instance;
-    }
 
     public String getLOGTAG(String time) {
         return LOGTAG + time;
