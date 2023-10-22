@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "CorePlugin"
+rootProject.name = "UnityLoggerUtility"
 include(":app")
 include(":mylibrary")

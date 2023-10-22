@@ -1,17 +1,18 @@
-package com.rojoin.mylibrary;
+package com.rojoin.UnityLogger;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Environment;
 import android.util.Log;
-import androidx.appcompat.app.AlertDialog;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 import java.io.FileWriter;
-
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.util.Log;
 
 public class Logger
 {
@@ -71,7 +72,7 @@ public class Logger
 
     public void CreateAlert()
     {
-       builder = new AlertDialog.Builder(unityActivity);
+        builder = new AlertDialog.Builder(unityActivity);
         builder.setTitle("Confirmación");
         builder.setMessage("¿Desea borrar todos los logs?");
         builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
@@ -87,10 +88,10 @@ public class Logger
         {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-          dialog.cancel();
+                dialog.cancel();
                 Log.v(LOGTAG,"Apreto No");
 
-        }
+            }
         });
 
     }
@@ -117,4 +118,4 @@ public class Logger
     }
 
 
-    }
+}

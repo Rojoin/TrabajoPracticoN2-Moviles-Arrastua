@@ -7,10 +7,10 @@ using UnityEngine.Android;
 
 public class TestPluginLog : MonoBehaviour
 {
-    private const string packageName = "com.rojoin.mylibrary";
+    private const string packageName = "com.rojoin.UnityLogger";
     private const string className = packageName + ".Logger";
     [SerializeField] private TextMeshProUGUI textBox;
-    
+
 #if UNITY_ANDROID
     private AndroidJavaClass PluginClass;
     private AndroidJavaClass unityPlayer;
@@ -18,7 +18,7 @@ public class TestPluginLog : MonoBehaviour
     private AndroidJavaObject unityActivity;
 
     private const string permission = "android.permission.WRITE_EXTERNAL_STORAGE";
-    private const int permissionRequestCode = 1;
+
 #endif
 
     private void Start()
@@ -32,6 +32,7 @@ public class TestPluginLog : MonoBehaviour
             unityActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
             pluginInstance.CallStatic("initialize", unityActivity);
 
+            Application.logMessageReceived += SendLogToAndroid;
             if (Permission.HasUserAuthorizedPermission(permission))
             {
                 Debug.Log("Permission is already granted.");
@@ -41,9 +42,45 @@ public class TestPluginLog : MonoBehaviour
                 // Request permission
                 Permission.RequestUserPermission(permission);
             }
+
+            pluginInstance.Call("CreateAlert");
         }
     }
 
+    private void SendLogToAndroid(string logString, string stackTrace, LogType type)
+    {
+        switch (type)
+        {
+            case LogType.Error:
+                pluginInstance.Call("SendLog", logString, 2);
+                break;
+            case LogType.Assert:
+                pluginInstance.Call("SendLog", logString);
+                break;
+            case LogType.Warning:
+                pluginInstance.Call("SendLog", logString, 1);
+                break;
+            case LogType.Log:
+                pluginInstance.Call("SendLog", logString, 0);
+                break;
+            case LogType.Exception:
+                pluginInstance.Call("SendLog", logString, 3);
+                break;
+        }
+    }
+
+    public void DeleteLogs()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            pluginInstance.Call("ShowAlert");
+        }
+    }
+
+    private void OnDestroy()
+    {
+        Application.logMessageReceived -= SendLogToAndroid;
+    }
 
     public void RunPlugin()
     {
@@ -52,24 +89,9 @@ public class TestPluginLog : MonoBehaviour
             string text = "Works";
             textBox.text = text;
             Debug.Log(text);
-            pluginInstance.Call("SendLog", text);
         }
     }
 
-    void OnPermissionResult(int requestCode, string[] permissions, int[] grantResults)
-    {
-        if (requestCode == permissionRequestCode)
-        {
-            if (grantResults.Length > 0 && grantResults[0] == (int)1)
-            {
-                Debug.Log("Permission granted.");
-                // You can now perform actions that require this permission.
-            }
-            else
-            {
-                Debug.Log("Permission denied.");
-                // Handle denied permission (e.g., show a message to the user).
-            }
-        }
-    }
+
+
 }

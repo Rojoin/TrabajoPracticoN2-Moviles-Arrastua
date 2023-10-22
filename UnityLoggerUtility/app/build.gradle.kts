@@ -1,16 +1,19 @@
 plugins {
-    id("com.android.library")
+    id("com.android.application")
 }
 
 android {
-    namespace = "com.rojoin.mylibrary"
-    compileSdk = 34
+    namespace = "com.rojoin.unityloggerutility"
+    compileSdk = 33
 
     defaultConfig {
-        minSdk = 22
+        applicationId = "com.rojoin.unityloggerutility"
+        minSdk = 24
+        targetSdk = 33
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -32,9 +35,4 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-}
-tasks.register<Copy>("copyBuild") {
-    from("build/outputs/aar")
-    include(project.name + "-release.aar")
-    into("../../Assets/Plugins/Android")
 }
