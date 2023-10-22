@@ -68,22 +68,27 @@ public class Logger {
     }
 
     public void SendLog(String log, int logType) {
-        logList.add(log);
+        String typeOfLog = "Null";
         switch (logType) {
             case 0:
                 Log.v("Unity Log", log);
+                typeOfLog = "Log:";
                 break;
             case 1:
                 Log.w("Unity Log", log);
+                typeOfLog = "Warning:";
                 break;
             case 2:
                 Log.e("Unity Log", log);
+                typeOfLog = "Error:";
                 break;
             case 3:
                 Log.d("Unity Log", log);
+                typeOfLog = "Exception:";
                 break;
 
         }
+        logList.add(typeOfLog+log);
         SaveLogsToFile();
 
     }
@@ -133,12 +138,12 @@ public class Logger {
                 fileWriter.append(log).append("\n");
             }
             Log.v("FileWriter", context.getExternalFilesDir(null).toString());
-            Toast.makeText(unityActivity.getApplicationContext(), "File created in: " + context.getExternalFilesDir(null).toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(unityActivity.getApplicationContext(), "File created in: " + context.getExternalFilesDir(null).toString(), Toast.LENGTH_SHORT).show();
 
             fileWriter.close();
         } catch (IOException e) {
             Log.v("FileWriter", "Failed To write");
-            Toast.makeText(unityActivity.getApplicationContext(), "Failed To write", Toast.LENGTH_LONG).show();
+            Toast.makeText(unityActivity.getApplicationContext(), "Failed To write", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -152,10 +157,10 @@ public class Logger {
 
             if (logFile.delete()) {
                 Log.i("FileDeleted", "File Unity_Rojoin_Log.txt deleted successfully.");
-                Toast.makeText(unityActivity.getApplicationContext(), "File Unity_Rojoin_Log.txt deleted successfully", Toast.LENGTH_LONG).show();
+                Toast.makeText(unityActivity.getApplicationContext(), "File Unity_Rojoin_Log.txt deleted successfully", Toast.LENGTH_SHORT).show();
             } else {
                 Log.e("FileDeleteError", "Failed to delete file " + fileName + ".txt");
-                Toast.makeText(unityActivity.getApplicationContext(), "Failed to delete file File Unity_Rojoin_Log.txt", Toast.LENGTH_LONG).show();
+                Toast.makeText(unityActivity.getApplicationContext(), "Failed to delete file File Unity_Rojoin_Log.txt", Toast.LENGTH_SHORT).show();
             }
         }
 
