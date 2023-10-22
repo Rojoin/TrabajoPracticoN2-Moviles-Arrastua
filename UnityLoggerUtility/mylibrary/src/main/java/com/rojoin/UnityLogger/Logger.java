@@ -10,6 +10,8 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -164,7 +166,33 @@ public class Logger {
             }
         }
 
+    }
+    private String readFile()
+    {
+        Context context = unityActivity.getApplicationContext();
+        File file = new File(context.getExternalFilesDir(null),"Unity_Rojoin_Log.txt");
+        Log.v("FileReader", context.getExternalFilesDir(null).toString());
+        byte[] content = new byte[(int)file.length()];
+        if (file.exists())
+        {
+            try
+            {
+                FileInputStream inputStream =  new FileInputStream(file);
+                inputStream.read(content);
+                return new String(content);
+            }
+            catch (IOException e)
+            {
+                Log.e("login activity", "Can not read file");
+                return "Can not read file";
+            }
+        }
+        else
+        {
+             Log.e("login activity", "File not found ");
+                return "File doenst Exist";
 
+        }
     }
 
 }
